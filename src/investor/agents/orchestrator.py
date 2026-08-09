@@ -29,9 +29,8 @@ class AgentOrchestrator:
 
         self._policy.validate_subagents(lead.profile, request.subagents)
         selected = (request.agent, *request.subagents)
-        runs = await asyncio.gather(
-            *(self._agent_factory(name).run(request.query) for name in selected)
-        )
+        selected_agents = tuple(self._agent_factory(name) for name in selected)
+        runs = await asyncio.gather(*(agent.run(request.query) for agent in selected_agents))
         status = (
             RunStatus.COMPLETED
             if all(run.status == RunStatus.COMPLETED for run in runs)

@@ -32,3 +32,19 @@ class SkillRegistry:
 
     def instructions_for(self, names: tuple[str, ...]) -> str:
         return "\n\n".join(self.get(name).instructions for name in names)
+
+    def validate_requirements(
+        self,
+        *,
+        skill_names: tuple[str, ...],
+        allowed_tools: tuple[str, ...],
+    ) -> None:
+        allowed = set(allowed_tools)
+        for name in skill_names:
+            skill = self.get(name)
+            missing = sorted(set(skill.required_tools).difference(allowed))
+            if missing:
+                tools = ", ".join(f"'{tool}'" for tool in missing)
+                raise ValueError(
+                    f"Skill '{name}' requires tools not allowed by the agent profile: {tools}."
+                )

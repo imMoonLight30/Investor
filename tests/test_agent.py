@@ -70,3 +70,7 @@ async def test_agent_authorizes_tools_and_preserves_evidence() -> None:
     assert run.steps == 2
     assert run.evidence[0].source == "test-primary-source"
     assert "Prefer primary evidence." in provider.requests[0].messages[0].content
+    assistant_message = provider.requests[1].messages[2]
+    assert assistant_message.tool_calls[0].id == "call-1"
+    assert assistant_message.tool_calls[0].name == "search"
+    assert assistant_message.tool_calls[0].arguments == {"q": "moat"}

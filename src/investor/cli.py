@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 from typing import Annotated
 
@@ -21,9 +20,6 @@ def check() -> None:
     """Validate local agent and MCP configuration."""
     settings = get_settings()
     runtime = create_runtime(settings=settings)
-    mcp_payload = json.loads(settings.mcp_config_path.read_text(encoding="utf-8"))
-    if not isinstance(mcp_payload.get("servers"), dict):
-        raise typer.BadParameter("MCP configuration must contain a 'servers' object.")
     typer.echo(
         f"Configuration valid: {len(runtime.orchestrator.agent_names())} agents, "
         f"{len(runtime.skills.names())} skills."

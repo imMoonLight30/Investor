@@ -59,5 +59,6 @@ def built_in_skills() -> tuple[Skill, ...]:
                 "commitment). Never promise returns, never give personalized financial advice, and "
                 "always state this is education, not a recommendation to buy or sell."
             ),
+            required_tools=("graham-checklist",),
         ),
     )

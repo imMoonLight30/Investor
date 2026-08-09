@@ -29,6 +29,8 @@ class GuardrailPolicy:
             )
         if len(set(subagents)) != len(subagents):
             raise GuardrailViolation("Duplicate subagents are not allowed.")
+        if profile.name in subagents:
+            raise GuardrailViolation("The lead agent cannot also be selected as a subagent.")
 
     def authorize_tool(self, profile: AgentProfile, descriptor: ToolDescriptor) -> None:
         if descriptor.name not in profile.allowed_tools:

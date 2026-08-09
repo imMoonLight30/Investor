@@ -46,3 +46,13 @@ def test_non_delegating_agent_cannot_spawn_subagents() -> None:
 
     with pytest.raises(GuardrailViolation, match="not allowed to delegate"):
         policy.validate_subagents(profile(), ("risk-agent",))
+
+
+def test_lead_agent_cannot_be_its_own_subagent() -> None:
+    policy = GuardrailPolicy(max_query_length=100, max_subagents=2)
+
+    with pytest.raises(GuardrailViolation, match="lead agent"):
+        policy.validate_subagents(
+            profile(can_delegate=True),
+            ("test-agent",),
+        )

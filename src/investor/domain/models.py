@@ -17,17 +17,18 @@ class ChatRole(StrEnum):
     TOOL = "tool"
 
 
+class ToolCall(BaseModel):
+    id: str
+    name: str
+    arguments: dict[str, Any] = Field(default_factory=dict)
+
+
 class ChatMessage(BaseModel):
     role: ChatRole
     content: str
     name: str | None = None
     tool_call_id: str | None = None
-
-
-class ToolCall(BaseModel):
-    id: str
-    name: str
-    arguments: dict[str, Any] = Field(default_factory=dict)
+    tool_calls: tuple[ToolCall, ...] = ()
 
 
 class ToolDescriptor(BaseModel):

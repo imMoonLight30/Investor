@@ -57,7 +57,13 @@ class ResearchAgent:
                     steps=step,
                 )
 
-            messages.append(ChatMessage(role=ChatRole.ASSISTANT, content=response.content))
+            messages.append(
+                ChatMessage(
+                    role=ChatRole.ASSISTANT,
+                    content=response.content,
+                    tool_calls=response.tool_calls,
+                )
+            )
             for call in response.tool_calls:
                 tool = self._tools.get(call.name)
                 self._policy.authorize_tool(self.profile, tool.descriptor)

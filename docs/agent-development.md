@@ -27,7 +27,9 @@ the agent loop surfaces these failures.
 4. Add the tool name and server name to only the necessary profiles.
 5. Test denial of both the tool and server independently.
 
-Do not dynamically expose every tool advertised by a server.
+Do not enable the server before its adapter and tools are registered; runtime
+initialization rejects enabled servers without an adapter. Do not dynamically
+expose every tool advertised by a server.
 
 ## Add a model provider
 

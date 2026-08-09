@@ -5,6 +5,7 @@ from investor.agents.profiles import load_profiles
 from investor.agents.research import ResearchAgent
 from investor.config import Settings, get_settings
 from investor.guardrails import GuardrailPolicy
+from investor.mcp.config import load_mcp_config, reject_unconfigured_servers
 from investor.providers import DevelopmentProvider, ModelProvider
 from investor.skills import SkillRegistry
 from investor.skills.builtin import built_in_skills
@@ -28,6 +29,7 @@ def create_runtime(
     active_settings = settings or get_settings()
     active_provider = provider or DevelopmentProvider()
     active_tools = tools or ToolRegistry((GrahamChecklistTool(),))
+    reject_unconfigured_servers(load_mcp_config(active_settings.mcp_config_path))
     skills = SkillRegistry(built_in_skills())
     profiles = load_profiles(active_settings.agent_config_dir)
     policy = GuardrailPolicy(
@@ -40,6 +42,11 @@ def create_runtime(
             profile = profiles[name]
         except KeyError as error:
             raise LookupError(f"Agent '{name}' is not configured.") from error
+        skills.validate_requirements(
+            skill_names=profile.allowed_skills,
+            allowed_tools=profile.allowed_tools,
+        )
+        active_tools.descriptors(profile.allowed_tools)
         return ResearchAgent(
             profile=profile,
             provider=active_provider,

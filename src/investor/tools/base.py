@@ -30,4 +30,8 @@ class ToolRegistry:
             raise LookupError(f"Tool '{name}' is not registered.") from error
 
     def descriptors(self, allowed: tuple[str, ...]) -> tuple[ToolDescriptor, ...]:
-        return tuple(self._tools[name].descriptor for name in allowed if name in self._tools)
+        missing = sorted(set(allowed).difference(self._tools))
+        if missing:
+            names = ", ".join(f"'{name}'" for name in missing)
+            raise LookupError(f"Allowed tools are not registered: {names}.")
+        return tuple(self._tools[name].descriptor for name in allowed)

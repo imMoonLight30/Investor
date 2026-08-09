@@ -36,6 +36,8 @@ The global fan-out limit applies before any task is scheduled.
   success-shaped evidence.
 - MCP transports are intentionally not assumed by the core. Authenticate,
   authorize, time-limit, and audit them in a concrete adapter.
+- Runtime initialization validates MCP configuration and rejects enabled servers
+  until their concrete `McpTool` transport adapters are registered.
 - This platform structures research; it does not provide financial advice.
 
 ## Extension points
