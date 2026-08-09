@@ -1,0 +1,15 @@
+{
+  "$schema": "./mcp.servers.schema.json",
+  "servers": {
+    "example-research": {
+      "enabled": false,
+      "transport": "stdio",
+      "command": "replace-with-server-command",
+      "args": [],
+      "env": {
+        "API_KEY": "${EXAMPLE_RESEARCH_API_KEY}"
+      },
+      "allowedTools": []
+    }
+  }
+}
